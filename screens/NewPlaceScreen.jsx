@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import * as placeActions from "../store/places-actions";
 import Colors from "../constants/Colors";
+import ImageSelector from "../components/ImageSelector";
 
 const NewPlaceScreen = (props) => {
   const dispatch = useDispatch();
@@ -34,7 +35,9 @@ const NewPlaceScreen = (props) => {
           onChangeText={titleChangeHandler}
           value={titleValue}
         />
+        <ImageSelector/>
         <Button
+        style={styles.button}
           title="Save Place"
           color={Colors.primary}
           onPress={savePlaceHandler}
@@ -65,4 +68,8 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 2,
   },
+  button: {
+      paddingTop: 10,
+      marginTop: 15
+  }
 });
