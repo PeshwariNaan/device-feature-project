@@ -11,10 +11,13 @@ import {
 import * as placeActions from "../store/places-actions";
 import Colors from "../constants/Colors";
 import ImageSelector from "../components/ImageSelector";
+import LocationSelector from "../components/LocationSelector";
+
 
 const NewPlaceScreen = (props) => {
   const dispatch = useDispatch();
   const [titleValue, setTitleValue] = useState("");
+  const [selectedImage, setSelectedImage] = useState();
 
   const titleChangeHandler = (text) => {
     // I could add validation here but I won't use it
@@ -22,8 +25,12 @@ const NewPlaceScreen = (props) => {
   };
 
   const savePlaceHandler = () => {
-    dispatch(placeActions.addPlace(titleValue));
-    props.navigation.goBack()
+    dispatch(placeActions.addPlace(titleValue, selectedImage));
+    props.navigation.goBack();
+  };
+
+  const imageTakenHandler = (imagePath) => {
+    setSelectedImage(imagePath);
   };
 
   return (
@@ -35,9 +42,10 @@ const NewPlaceScreen = (props) => {
           onChangeText={titleChangeHandler}
           value={titleValue}
         />
-        <ImageSelector/>
+        <ImageSelector onTakeImage={imageTakenHandler} />
+        <LocationSelector/>
         <Button
-        style={styles.button}
+          style={styles.button}
           title="Save Place"
           color={Colors.primary}
           onPress={savePlaceHandler}
@@ -68,8 +76,5 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 2,
   },
-  button: {
-      paddingTop: 10,
-      marginTop: 15
-  }
+  button: {},
 });
