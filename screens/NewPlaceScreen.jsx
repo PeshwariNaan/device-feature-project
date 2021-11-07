@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import {
   StyleSheet,
@@ -13,11 +13,11 @@ import Colors from "../constants/Colors";
 import ImageSelector from "../components/ImageSelector";
 import LocationSelector from "../components/LocationSelector";
 
-
 const NewPlaceScreen = (props) => {
   const dispatch = useDispatch();
   const [titleValue, setTitleValue] = useState("");
   const [selectedImage, setSelectedImage] = useState();
+  const [selectedLocation, setSelectedLocation] = useState()
 
   const titleChangeHandler = (text) => {
     // I could add validation here but I won't use it
@@ -25,13 +25,17 @@ const NewPlaceScreen = (props) => {
   };
 
   const savePlaceHandler = () => {
-    dispatch(placeActions.addPlace(titleValue, selectedImage));
+    dispatch(placeActions.addPlace(titleValue, selectedImage, selectedLocation));
     props.navigation.goBack();
   };
 
   const imageTakenHandler = (imagePath) => {
     setSelectedImage(imagePath);
   };
+
+  const locationPickedHandler = useCallback((location) => {
+    setSelectedLocation(location);
+  }, []);
 
   return (
     <ScrollView>
@@ -43,7 +47,10 @@ const NewPlaceScreen = (props) => {
           value={titleValue}
         />
         <ImageSelector onTakeImage={imageTakenHandler} />
-        <LocationSelector/>
+        <LocationSelector
+          navigation={props.navigation}
+          onLocationPicked={locationPickedHandler}
+        />
         <Button
           style={styles.button}
           title="Save Place"
